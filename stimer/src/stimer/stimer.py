@@ -6,17 +6,23 @@ from exceptions import ArgumentError
 START = "start"
 END = "end"
 
+
 def dt_now() -> datetime.datetime:
-    return datetime.datetime.now()
+    dt = datetime.datetime.now()
+    return dt
 
 
 def dt_now_str() -> str:
-    return str(dt_now())
+    dt_str = dt_now().strftime("%Y-%m-%d %H:%M:%S")
+    return dt_str
 
 
 def last_line(path: str) -> str:
-    with open(path) as f:
-         line = f.read().splitlines()[-1]
+    try:
+        with open(path) as f:
+            line = f.read().splitlines()[-1]
+    except FileNotFoundError:
+        line = ""
     return line
 
 
@@ -36,6 +42,7 @@ def start_end(log_path: str, type_of_dt: str) -> None:
     elif type_of_dt == END:
         if last_line_type == END:
             raise ArgumentError("Forbidden.")
+
 
     with open(log_path, "a") as f:
         f.write(buffer)
