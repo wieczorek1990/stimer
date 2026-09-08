@@ -1,5 +1,6 @@
 #!/bin/sh
 # Install script.
+set -e
 
 name=stimer
 
