@@ -1,7 +1,7 @@
 import datetime
 import enum
 
-from exceptions import ArgumentError
+from stimer.exceptions import ArgumentError
 
 
 class LogEntryType(enum.Enum):

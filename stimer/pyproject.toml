@@ -1,7 +1,7 @@
 [project]
 name = "stimer"
 version = "0.1.0"
-description = ""
+description = "Simple timer CLI tool."
 authors = [
     {name = "Łukasz Wieczorek",email = "luke@soiree.tech"}
 ]
@@ -9,6 +9,9 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
 ]
+
+[project.scripts]
+stimer = "stimer.__main__:main"
 
 [tool.poetry]
 packages = [{include = "stimer", from = "src"}]

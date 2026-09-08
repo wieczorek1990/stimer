@@ -1,7 +1,7 @@
 import sys
 
-import stimer
-from exceptions import ArgumentError
+from stimer import stimer
+from stimer.exceptions import ArgumentError
 
 
 def main():
@@ -21,6 +21,3 @@ def main():
         exit(1)
 
     stimer.main(log_path, starting)
-
-
-main()
