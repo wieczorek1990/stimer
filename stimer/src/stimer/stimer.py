@@ -1,10 +1,12 @@
 import datetime
+import enum
 
 from exceptions import ArgumentError
 
 
-START = "start"
-END = "end"
+class Type(enum.Enum):
+    START = "start"
+    END = "end"
 
 
 def dt_now() -> datetime.datetime:
@@ -27,7 +29,7 @@ def last_line(path: str) -> str:
 
 
 def start_end(log_path: str, type_of_dt: str) -> None:
-    if type_of_dt not in {START, END}:
+    if type_of_dt not in {Type.START, Type.END}:
         raise ArgumentError("Invalid type of datetime.")
 
     now = dt_now_str()
@@ -36,11 +38,11 @@ def start_end(log_path: str, type_of_dt: str) -> None:
     line = last_line(log_path)
     last_line_type = line.split(',')[0]
 
-    if type_of_dt == START:
-        if last_line_type == START:
+    if type_of_dt == Type.START:
+        if last_line_type == Type.START:
            raise ArgumentError("Forbidden.")
-    elif type_of_dt == END:
-        if last_line_type == END:
+    elif type_of_dt == Type.END:
+        if last_line_type == Type.END:
             raise ArgumentError("Forbidden.")
 
 
@@ -49,15 +51,11 @@ def start_end(log_path: str, type_of_dt: str) -> None:
 
 
 def start(log_path: str) -> None:
-    print("Start.")
-    start_end(log_path, f"{START}")
-    print("Done start.")
+    start_end(log_path, Type.START)
 
 
 def end(log_path: str) -> None:
-    print("End.")
-    start_end(log_path, f"{END}")
-    print("Done end.")
+    start_end(log_path, Type.END)
 
 
 def main(log_path: str, starting: bool) -> None:
