@@ -1,10 +1,7 @@
 import sys
 
 import stimer
-
-
-class ArgumentError(ValueError):
-    pass
+from exceptions import ArgumentError
 
 
 def main():
@@ -12,11 +9,12 @@ def main():
 
     arguments = sys.argv[1:]
     print(f"Arguments are: {arguments}")
-    if len(arguments) != 1:
+    if len(arguments) != 2:
         raise ArgumentError("Invalid arguments length.")
         exit(1)
 
-    argument = arguments[0]
+    log_path = arguments[0]
+    argument = arguments[1]
     print(f"Argument is {argument}.")
     if argument == "on":
         starting = True
@@ -26,7 +24,7 @@ def main():
         raise ArgumentError("Invalid argument. (on/off)")
         exit(1)
 
-    stimer.main(starting)
+    stimer.main(log_path, starting)
 
     print("Done.")
 

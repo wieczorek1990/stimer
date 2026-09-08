@@ -1,6 +1,10 @@
 import datetime
-import os
 
+from exceptions import ArgumentError
+
+
+START = "start"
+END = "end"
 
 def dt_now() -> datetime.datetime:
     return datetime.datetime.now()
@@ -10,34 +14,50 @@ def dt_now_str() -> str:
     return str(dt_now())
 
 
-def start_end(type_of_dt: str) -> None:
-    if type_of_dt not in {"START", "END"}:
+def last_line(path: str) -> str:
+    with open(path) as f:
+         line = f.read().splitlines()[-1]
+    return line
+
+
+def start_end(log_path: str, type_of_dt: str) -> None:
+    if type_of_dt not in {START, END}:
         raise ArgumentError("Invalid type of datetime.")
 
     now = dt_now_str()
     buffer = f"{type_of_dt},{now}\n"
 
-    with open("log.txt", "a") as f:
+    line = last_line(log_path)
+    last_line_type = line.split(',')[0]
+
+    if type_of_dt == START:
+        if last_line_type == START:
+           raise ArgumentError("Forbidden.")
+    elif type_of_dt == END:
+        if last_line_type == END:
+            raise ArgumentError("Forbidden.")
+
+    with open(log_path, "a") as f:
         f.write(buffer)
 
 
-def start() -> None:
+def start(log_path: str) -> None:
     print("Start.")
-    start_end("START")
+    start_end(log_path, f"{START}")
     print("Done start.")
 
 
-def end() -> None:
+def end(log_path: str) -> None:
     print("End.")
-    start_end("END")
+    start_end(log_path, f"{END}")
     print("Done end.")
 
 
-def main(starting: bool) -> None:
+def main(log_path: str, starting: bool) -> None:
     if starting:
-        start()
+        start(log_path)
     elif not starting:
-        end()
+        end(log_path)
     else:
         raise ValueError("Invalid starting value.")
         exit(1)
