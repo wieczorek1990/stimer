@@ -3,6 +3,8 @@ import enum
 
 from stimer.exceptions import ArgumentError
 
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+
 
 class LogEntryType(enum.Enum):
     START = "start"
@@ -11,7 +13,7 @@ class LogEntryType(enum.Enum):
     @classmethod
     def from_str(cls, s: str) -> "LogEntryType":
         try:
-            return cls(s.strip().lower())
+            return cls(s)
         except ValueError:
             raise ValueError(f"Invalid LogEntryType: '{s}'") from None
 
@@ -21,7 +23,7 @@ def dt_now() -> datetime.datetime:
 
 
 def dt_now_str() -> str:
-    return dt_now().strftime("%Y-%m-%d %H:%M:%S")
+    return dt_now().strftime(DATETIME_FORMAT)
 
 
 def last_line(path: str) -> str:

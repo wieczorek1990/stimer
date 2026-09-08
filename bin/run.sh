@@ -1,5 +1,5 @@
 #!/bin/sh
-# Stimer runner.
+# Runner.
 set -e
 
 name=stimer

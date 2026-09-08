@@ -1,2 +1,2 @@
 # Stimer
-Stimer for on/off work in logs.
+Timer for on/off work in text logs.
