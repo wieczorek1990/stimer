@@ -5,4 +5,4 @@ set -e
 name=stimer
 
 cd ${name}
-pip uninstall ${name} -y && pip install --user .
+pip3 uninstall ${name} -y && pip3 install --user .
