@@ -3,4 +3,5 @@
 
 name=stimer
 
-pip uninstall {} -y && pip install --user .
+cd ${name}
+pip uninstall ${name} -y && pip install --user .
