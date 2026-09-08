@@ -4,65 +4,65 @@ import enum
 from exceptions import ArgumentError
 
 
-class Type(enum.Enum):
+class LogEntryType(enum.Enum):
     START = "start"
     END = "end"
 
+    @classmethod
+    def from_str(cls, s: str) -> "LogEntryType":
+        try:
+            return cls(s.strip().lower())
+        except ValueError:
+            raise ValueError(f"Invalid LogEntryType: '{s}'") from None
+
 
 def dt_now() -> datetime.datetime:
-    dt = datetime.datetime.now()
-    return dt
+    return datetime.datetime.now()
 
 
 def dt_now_str() -> str:
-    dt_str = dt_now().strftime("%Y-%m-%d %H:%M:%S")
-    return dt_str
+    return dt_now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 def last_line(path: str) -> str:
     try:
         with open(path) as f:
-            line = f.read().splitlines()[-1]
+            lines = f.read().splitlines()
     except FileNotFoundError:
-        line = ""
-    return line
+        return ""
+    return lines[-1] if lines else ""
 
 
-def start_end(log_path: str, type_of_dt: str) -> None:
-    if type_of_dt not in {Type.START, Type.END}:
-        raise ArgumentError("Invalid type of datetime.")
-
-    now = dt_now_str()
-    buffer = f"{type_of_dt},{now}\n"
-
+def last_line_type(log_path: str) -> "LogEntryType | None":
     line = last_line(log_path)
-    last_line_type = line.split(',')[0]
-
-    if type_of_dt == Type.START:
-        if last_line_type == Type.START:
-           raise ArgumentError("Forbidden.")
-    elif type_of_dt == Type.END:
-        if last_line_type == Type.END:
-            raise ArgumentError("Forbidden.")
+    if not line:
+        return None
+    try:
+        return LogEntryType.from_str(line.split(",")[0])
+    except ValueError:
+        return None
 
 
+def start_end(log_path: str, kind: LogEntryType) -> None:
+    last_type = last_line_type(log_path)
+    if last_type is kind:
+        raise ArgumentError(f"Forbidden: previous entry was also {kind.value}.")
+
+    log_line = f"{kind.value},{dt_now_str()}\n"
     with open(log_path, "a") as f:
-        f.write(buffer)
+        f.write(log_line)
 
 
 def start(log_path: str) -> None:
-    start_end(log_path, Type.START)
+    start_end(log_path, LogEntryType.START)
 
 
 def end(log_path: str) -> None:
-    start_end(log_path, Type.END)
+    start_end(log_path, LogEntryType.END)
 
 
 def main(log_path: str, starting: bool) -> None:
     if starting:
         start(log_path)
-    elif not starting:
-        end(log_path)
     else:
-        raise ValueError("Invalid starting value.")
-        exit(1)
+        end(log_path)
